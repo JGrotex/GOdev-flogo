@@ -1,0 +1,168 @@
+{
+  "name": "counter",
+  "type": "flogo:app",
+  "version": "0.0.1",
+  "description": "Sample flogo app",
+  "triggers": [
+    {
+      "name": "Receiver",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/rest",
+      "description": "Simple REST Trigger",
+      "settings": {
+        "port": "8189"
+      },
+      "id": "receiver",
+      "handlers": [
+        {
+          "settings": {
+            "method": "GET",
+            "path": "/counter",
+            "autoIdReply": "false",
+            "useReplyHandler": "true"
+          },
+          "actionId": "hello_world",
+          "actionMappings": {
+            "input": [],
+            "output": []
+          }
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "data": {
+        "flow": {
+          "name": "HelloWorld",
+          "type": 1,
+          "attributes": [],
+          "rootTask": {
+            "id": 1,
+            "type": 1,
+            "tasks": [
+              {
+                "id": 2,
+                "name": "Number Counter",
+                "description": "Simple Global Counter Activity",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-counter",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/counter",
+                "attributes": [
+                  {
+                    "name": "counterName",
+                    "value": "number",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "increment",
+                    "value": "true",
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  {
+                    "name": "reset",
+                    "value": "false",
+                    "required": false,
+                    "type": "boolean"
+                  }
+                ]
+              },
+              {
+                "id": 3,
+                "name": "Logger",
+                "description": "Simple Log Activity",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-log",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+                "attributes": [
+                  {
+                    "name": "message",
+                    "value": "hello world",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "flowInfo",
+                    "value": "true",
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  {
+                    "name": "addToFlow",
+                    "value": "true",
+                    "required": false,
+                    "type": "boolean"
+                  }
+                ],
+                "inputMappings": [
+                  {
+                    "type": 1,
+                    "value": "{A2.value}",
+                    "mapTo": "message"
+                  }
+                ]
+              },
+              {
+                "id": "reply_4",
+                "name": "Reply To Trigger",
+                "description": "Simple Reply Activity",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-reply",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/reply",
+                "attributes": [
+                  {
+                    "name": "code",
+                    "value": "200",
+                    "required": true,
+                    "type": "integer"
+                  },
+                  {
+                    "name": "data",
+                    "value": "done",
+                    "required": false,
+                    "type": "any"
+                  }
+                ],
+                "inputMappings": [
+                  {
+                    "type": 1,
+                    "value": "${activity.2.value}",
+                    "mapTo": "data"
+                  }
+                ]
+              }
+            ],
+            "links": [
+              {
+                "id": 1,
+                "from": 2,
+                "to": 3,
+                "type": 0
+              },
+              {
+                "id": 2,
+                "from": 3,
+                "to": "reply_4",
+                "type": 0
+              }
+            ],
+            "attributes": []
+          },
+          "explicitReply": true
+        }
+      },
+      "id": "hello_world",
+      "metadata": {
+        "input": [],
+        "output": [
+          {
+            "name": "data",
+            "type": "string"
+          }
+        ]
+      },
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow"
+    }
+  ]
+}

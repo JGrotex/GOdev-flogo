@@ -1,0 +1,198 @@
+{
+  "name": "GPIOService",
+  "type": "flogo:app",
+  "version": "0.0.1",
+  "description": "",
+  "triggers": [
+    {
+      "name": "Receive HTTP Message",
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/trigger/rest",
+      "description": "Simple REST Trigger",
+      "settings": {
+        "port": "8890"
+      },
+      "id": "receive_http_message",
+      "handlers": [
+        {
+          "actionMappings": {
+            "input": [
+              {
+                "mapTo": "on",
+                "type": 1,
+                "value": "pathParams.on"
+              }
+            ],
+            "output": []
+          },
+          "settings": {
+            "method": "GET",
+            "path": "/led/:on",
+            "autoIdReply": "true",
+            "useReplyHandler": "false"
+          },
+          "actionId": "trigger_io"
+        }
+      ]
+    }
+  ],
+  "actions": [
+    {
+      "data": {
+        "flow": {
+          "name": "triggerIO",
+          "type": 1,
+          "attributes": [],
+          "rootTask": {
+            "id": "root",
+            "type": 1,
+            "tasks": [
+              {
+                "id": "log_2",
+                "name": "Log Message",
+                "description": "Simple Log Activity",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-log",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/log",
+                "attributes": [
+                  {
+                    "name": "message",
+                    "value": null,
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "flowInfo",
+                    "value": "false",
+                    "required": false,
+                    "type": "boolean"
+                  },
+                  {
+                    "name": "addToFlow",
+                    "value": "false",
+                    "required": false,
+                    "type": "boolean"
+                  }
+                ],
+                "inputMappings": [
+                  {
+                    "type": 1,
+                    "value": "$flow.on",
+                    "mapTo": "message"
+                  }
+                ]
+              },
+              {
+                "id": "gpio_3",
+                "name": "Control GPIO",
+                "description": "Control raspberry gpio",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-gpio",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/gpio",
+                "attributes": [
+                  {
+                    "name": "method",
+                    "value": "Set State",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "pinNumber",
+                    "value": "7",
+                    "required": true,
+                    "type": "integer"
+                  },
+                  {
+                    "name": "direction",
+                    "value": "Output",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "state",
+                    "value": "High",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "Pull",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  }
+                ]
+              },
+              {
+                "id": "gpio_4",
+                "name": "Control GPIO (2)",
+                "description": "Control raspberry gpio",
+                "type": 1,
+                "activityType": "github-com-tibco-software-flogo-contrib-activity-gpio",
+                "activityRef": "github.com/TIBCOSoftware/flogo-contrib/activity/gpio",
+                "attributes": [
+                  {
+                    "name": "method",
+                    "value": "Set State",
+                    "required": true,
+                    "type": "string"
+                  },
+                  {
+                    "name": "pinNumber",
+                    "value": "7",
+                    "required": true,
+                    "type": "integer"
+                  },
+                  {
+                    "name": "direction",
+                    "value": "Output",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "state",
+                    "value": "Low",
+                    "required": false,
+                    "type": "string"
+                  },
+                  {
+                    "name": "Pull",
+                    "value": "",
+                    "required": false,
+                    "type": "string"
+                  }
+                ]
+              }
+            ],
+            "links": [
+              {
+                "id": 1,
+                "from": "log_2",
+                "to": "gpio_3",
+                "type": 1,
+                "value": "$flow.on==true"
+              },
+              {
+                "id": 2,
+                "from": "log_2",
+                "to": "gpio_4",
+                "type": 1,
+                "value": "$flow.on==false"
+              }
+            ],
+            "attributes": []
+          }
+        }
+      },
+      "id": "trigger_io",
+      "metadata": {
+        "input": [
+          {
+            "name": "on",
+            "type": "boolean"
+          }
+        ],
+        "output": []
+      },
+      "ref": "github.com/TIBCOSoftware/flogo-contrib/action/flow"
+    }
+  ]
+}
