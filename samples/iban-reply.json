@@ -31,8 +31,8 @@
             "output": [
               {
                 "mapTo": "code",
-                "type": 1,
-                "value": "\"200\""
+                "type": 2,
+                "value": 200
               },
               {
                 "mapTo": "data",
