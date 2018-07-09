@@ -1,0 +1,74 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "eMailer",
+    "x-lastModified": "May 22, 2018 06:42AM PST",
+    "description": "simple HTML Emailer"
+  },
+  "paths": {
+    "/sendEmail": {
+      "post": {
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Success response"
+          }
+        },
+        "parameters": [
+          {
+            "name": "body",
+            "in": "body",
+            "description": "",
+            "schema": {
+              "$ref": "#/definitions/emailSenderSchema"
+            }
+          }
+        ],
+        "operationId": "postSendEmail",
+        "consumes": [
+          "application/json"
+        ],
+        "summary": "email Sender with HTML Body",
+        "description": "supports Templates stored externally"
+      }
+    }
+  },
+  "definitions": {
+    "emailSenderSchema": {
+      "type": "object",
+      "properties": {
+        "toEmail": {
+          "type": "string",
+          "default": "some@somewhere.com"
+        },
+        "templateURL": {
+          "type": "string",
+          "default": "http://www.godev.de/emailtemplates/default.html"
+        },
+        "LogoURL": {
+          "type": "string",
+          "default": "http://www.godev.de/img/godev.png"
+        },
+        "Headline": {
+          "type": "string",
+          "default": "someheadline"
+        },
+        "Body": {
+          "type": "string",
+          "default": "bodytext"
+        },
+        "DirectLinkURL": {
+          "type": "string",
+          "default": "http://www.godev.de/"
+        },
+        "Footer": {
+          "type": "string",
+          "default": "somefooter"
+        }
+      }
+    }
+  }
+}
