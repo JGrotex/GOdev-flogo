@@ -7,4 +7,3 @@ Photo of my Demo LEGO Box running all Implemenations on Raspberry PI 3.
 
 Samples tested on Raspberry PI 3 and Raspberry PI zero W.
 
-more Details here: http://www.godev.de/GOLib/flogo-pi.html
